@@ -1,0 +1,21 @@
+.cards{
+    margin: 70px 50px;
+    box-shadow: 10px 20px 10px green
+
+}
+
+.navbar{
+    background-color:yellow; 
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.card{
+    box-shadow: 5px 10px 10px silver
+
+}
+
+/* .card-header{
+    font-weight: bold;
+    box-shadow: 10px 20px 10px green
+}
+ */
