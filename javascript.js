@@ -1,17 +1,18 @@
 class Entrada {
-    constructor(nombre, zona, precio, imagen,id) {
+    constructor(cantidad, nombre, zona, precio, imagen,id) {
+        this.cantidad = cantidad
         this.nombre = nombre;
         this.zona = zona;
-        this.precio = (precio * 1.15).toFixed(0); //ticket service incluido
+        this.precio = precio
         this.imagen= imagen;
         this.id = id;
     }
 }
 
 
-const eventoCirque = new Entrada("Cirque", "general", 10000, "./img/cirque.jpg",1);
-const eventoGuetta = new Entrada("Guetta", "general", 20500, "./img/guetta.jpg",2);
-const eventoMarco = new Entrada("Marco Carolla", "general", 14500, "./img/marco.webp",3);
+const eventoCirque = new Entrada(1,"Cirque Du Soleil", "general", 12000, "./img/cirque.jpg",1);
+const eventoGuetta = new Entrada(1,"Guetta", "general", 15500, "./img/guetta.jpg",2);
+const eventoMarco = new Entrada(1,"Marco Carolla", "general", 10500, "./img/marco.webp",3);
 
 const arrayEntradas = [];
 
@@ -39,6 +40,7 @@ arrayEntradas.forEach(element => {
                                                     <h5 class="card-title">$${element.precio} AR</h5>
                                             <p class="card-text">Agregar un texto </p>
                                             <button id= "botonCompra${element.id}" class="btn btn-info">Comprar entrada</button>
+                                            <button id= "botonEliminar${element.id}" class="btn btn-danger">Eliminar Carrito</button>
                                          </div>
                                        </div>
                                      </div> `
@@ -46,47 +48,67 @@ arrayEntradas.forEach(element => {
         containerCards.appendChild(card)
 
         let botonCompra = document.getElementById(`botonCompra${element.id}`);
+        let botonEliminar = document.getElementById(`botonEliminar${element.id}`)
 
         console.log(botonCompra);
+        console.log(botonEliminar);
 
         botonCompra.addEventListener("click", ()=>{
-            agregoAlCarrito(element.precio)
+         agregoAlCarrito(element.id);   
 
         })
-    
+
+        
+        botonEliminar.addEventListener("click", ()=>{
+        eliminarDeCarrito(element.id)
+
+        })
+
+        
 });
 
-const numeroDeEntradas = document.getElementById("cantidad de entradas");
-
 const totalCompra = document.getElementById("totalCompra");
+const numeroDeEntradas = document.getElementById("cantidad de entradas");
+const btnDisminuir = document.getElementById("disminuir");
 
 const carritoCompras = [];
 
 const agregoAlCarrito = (id)=>{
-    const boleta = arrayEntradas.find(entrada => entrada.precio === id);
+
+    const boleta = arrayEntradas.find(entrada => entrada.id === id);
     carritoCompras.push(boleta);
 
-    console.log(carritoCompras)
+    console.log(carritoCompras);
 
     let valorTotal = 0;
-
-    carritoCompras.forEach(item => {
-         valorTotal = item.precio 
-
-
-        totalCompra.innerText = valorTotal
-        
+    carritoCompras.forEach(element => {
+        valorTotal += element.precio * element.cantidad
     });
-
     
+    totalCompra.innerText = valorTotal;
+    numeroDeEntradas.innerHTML =carritoCompras.length
+   
+};
 
-}
 
 
+   
 
-const btnAumentar = document.getElementById("aumentar");
+const eliminarDeCarrito = (id) =>{
+    
+    const boleta = carritoCompras.find(entrada => entrada.id === id);
+    console.log(boleta);
+    carritoCompras.splice(carritoCompras.indexOf(boleta),1);
+    console.log(carritoCompras);
 
-const btnDisminuir = document.getElementById("disminuir");
+    const reducirArray = carritoCompras.reduce((acc,entrada) => acc + entrada.precio, 0);
+  
+    console.log(reducirArray)
+
+    totalCompra.innerText = reducirArray; 
+    numeroDeEntradas.innerText = carritoCompras.length  
+
+};
 
 
 
