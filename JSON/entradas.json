@@ -1,0 +1,7 @@
+[
+    {"cantidad":1,  "nombre": "Cirque Du Soleil", "zona": "general", "precio":12000, "imagen": "./img/cirque.jpg", "id": 1},
+    {"cantidad":1,  "nombre": "David Guetta", "zona": "general", "precio":15500, "imagen": "./img/guetta.jpg", "id": 2},
+    {"cantidad":1,  "nombre": "Marco Carolla", "zona": "general", "precio":10500, "imagen": "./img/marco.webp", "id": 3}
+
+
+]
