@@ -26,154 +26,185 @@ const listaEntradas = "JSON/entradas.json";
 
 const containerCards = document.getElementById("containerCards");
 
-let carritoCompras = [];
-
-/* Integro FETCH */
-
-fetch(listaEntradas)
-  .then(response => response.json())
-  .then(entrada => {
-     entrada.forEach(element => {
-        const card = document.createElement("div")
-            card.innerHTML = `<div class="row">
-                                           <div class="col-md-4 mb-4">
-                                             <div class="card">
-                                            <div class="card-header">
-                                              <h5>Disponible</h5  >
-                                             </div>
-                                          <img src="${element.imagen}" class="card-img-top" alt="...">
-                                             <div class="card-body">
-                                                        <h5 class="card-title">$${element.precio} AR</h5>
-                                                <p class="card-text">Agregar un texto </p>
-                                                <button id= "botonCompra${element.id}" class="btn btn-info">Comprar entrada</button>
-                                                <button id= "botonEliminar${element.id}" class="btn btn-danger">Eliminar Carrito</button>
-                                             </div>
-                                           </div>
-                                         </div> `
-    
-            containerCards.appendChild(card)
-    
-            let botonCompra = document.getElementById(`botonCompra${element.id}`);
-            let botonEliminar = document.getElementById(`botonEliminar${element.id}`)
-    
-            console.log(botonCompra);
-            console.log(botonEliminar);
-
-            //Boton para agregar productos al carrito de compra 
-    
-            botonCompra.addEventListener("click", ()=>{
-                agregoAlCarrito(element.id);  
-                /* TOASTIFY */
-                Toastify ({
-                    text: `Entrada ${element.nombre} agregada al carrito`,
-                    offset: {
-                        x: 10, 
-                        y: 30,
-                      },
-                    duration: 2000,
-                    stopOnFocus: true,
-                    style:{
-                        background: "70, 86, 125",
-                    }
-        
-                 }).showToast();
-            
-            })
-              
-            //Funcion agregar al carrito de compras 
-            const agregoAlCarrito = (id)=>{
-
-                const boleta = entrada.find(entrada => entrada.id === id);
-                carritoCompras.push(boleta);
-                
-                console.log(carritoCompras);
-            
-                let valorTotal = 0;
-                carritoCompras.forEach(element => {
-                    valorTotal += element.precio * element.cantidad
-                });
-            
-                //STORAGE
-            
-                localStorage.setItem("carritoCompras", JSON.stringify(carritoCompras));
-                
-                totalCompra.innerText = valorTotal;
-                numeroDeEntradas.innerHTML =carritoCompras.length
-            
-            };
-            
-            //Boton para eliminar productos del carrito de compra 
-            botonEliminar.addEventListener("click", ()=>{
-            eliminarDeCarrito(element.id)
-    
-            })
-    
-            
-    });
-
-  })
-  .catch(error => console.log(error))
-  .finally(()=> console.log("Proceso Finalizado"))
-
 const totalCompra = document.getElementById("totalCompra");
+
+const totalCompraModal = document.getElementById("totalCompraModal");
+
 const numeroDeEntradas = document.getElementById("cantidad de entradas");
 
+const productosModal = document.getElementById("productosModal");
 
-//Funcion eliminar del carrito de compras
-const eliminarDeCarrito = (id) =>{
-    
-    const boleta = carritoCompras.find(entrada => entrada.id === id);
-    console.log(boleta);
-    carritoCompras.splice(carritoCompras.indexOf(boleta),1);
-    console.log(carritoCompras);
+let carritoCompras = [];
 
-    const eliminoValor = carritoCompras.reduce((acc,entrada) => acc + entrada.precio, 0);
-  
-    console.log(eliminoValor)
+let total = 0;
 
-    totalCompra.innerText = eliminoValor; 
-    numeroDeEntradas.innerText = carritoCompras.length  
+//*Integro FETCH
 
+fetch(listaEntradas)
+  .then((response) =>  response.json())
+  .then((entrada) => {
+     entrada.forEach((element) => {
+      const card = document.createElement("div");
+      card.innerHTML =  `<div>
+                             <div class="col d-flex justify-content-center mb-4">
+                                 <div class="card shadow mb-1 bg-white rounded" style="width: 50rem;">
+                                   <div class="card-header text-success">
+                                      <h5>Disponible</h5>
+                                   </div>
+                                     <img src="${element.imagen}" class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <h5 class="card-text">$${element.precio} AR</h5>
+                                    <p class="card-text">Agregar un texto </p>
+                                    <button id= "botonCompra${element.id}" class="btn btn-info">Comprar entrada</button>
+                                </div>
+                             </div>
+                        </div> `;
+containerCards.appendChild(card);
 
-};
+      let botonCompra = document.getElementById(`botonCompra${element.id}`);
+      //let botonEliminar = document.getElementById(`botonEliminar${element.id}`);
 
-const verCarrito = document.getElementById("verCarrito");
-const verMicompra = document.getElementById("verMiCompra");
+      console.log(botonCompra);
+      //console.log(botonEliminar);
 
+      //*Boton para eliminar productos del carrito de compra
 
-//JSON
+     /*  botonEliminar.addEventListener("click", () => {
+        eliminarDeCarrito(element.id);
+      }); */
 
-verCarrito.addEventListener("click", ()=>{
-   mostarMiCompra()
-});
+      //*Boton para agregar productos al carrito de compra
 
-const mostarMiCompra = (()=>{
-     verMicompra.innerHTML = "";
-    const usuarioPaga = JSON.parse(localStorage.getItem("carritoCompras"));
-    usuarioPaga.forEach(element => {
-        const div = document.createElement("div");
-        div.innerHTML = `<h3>Tus entradas</h3>
-               <p>Evento: ${element.nombre}</P>
-               <p>Entrada : ${element.zona}</p>
-               <P>Costo entrada: ${element.precio}</p>
-               `;
-        verMicompra.appendChild(div);       
-    });
-})
+      botonCompra.addEventListener("click", () => {
+        agregoAlCarrito(element.id);
+        /* TOASTIFY */
+        Toastify({
+          text: `Entrada ${element.nombre} agregada al carrito`,
+          offset: {
+            x: 10,
+            y: 30,
+          },
+          duration: 2000,
+          stopOnFocus: true,
+          style: {
+            background: "70, 86, 125",
+          },
+        }).showToast();
+      });
 
+      //*Funcion agregar al carrito de compras
 
+      const agregoAlCarrito = (id) => {
+        
+        const boleta = entrada.find((entrada) => entrada.id === id);
 
+          if(carritoCompras.includes(boleta)){
+            boleta.cantidad ++
+          }else{
+            carritoCompras.push(boleta);
 
+          }
+          //console.log(carritoCompras);
+          productosModal.innerHTML = "";
+            
+         carritoCompras.forEach(element =>{
+        //const div = document.createElement("div");
+        productosModal.innerHTML +=`<p> ${element.nombre}  Cantidad: <span id="cantidadModal">${element.cantidad}</span></P> <button id= "eliminarProductoModal${element.id}" class="btn btn-danger">X</button>`
 
+        //productosModal.appendChild(div);
 
-
-
-
-
-
-
-
-
+        })
+        
 
         
-   
+
+        getTotal()
+
+        //totalCompra.innerText = valorTotal;
+        //numeroDeEntradas.innerHTML = carritoCompras.length;
+
+        //*Agrego producto al storage
+        //addLocalStorage()
+
+      };
+
+      //mostrarCompraStorage()//*LocalStorage
+     
+    });
+  })
+  .catch((error) => console.log(error))
+  .finally(() => console.log("Proceso Finalizado"));
+
+  function getTotal(){
+
+    let valorTotal = carritoCompras.reduce((acc, item) => acc + item.precio * item.cantidad,0);
+    totalCompra.innerText = valorTotal;
+    totalCompraModal.innerText = valorTotal; 
+
+  }
+
+//*Funcion eliminar del carrito de compras
+/* const eliminarDeCarrito = (id) => {
+  const boleta = carritoCompras.find((entrada) => entrada.id === id);
+  console.log(boleta);
+  carritoCompras.splice(carritoCompras.indexOf(boleta), 1);
+  console.log(carritoCompras);
+
+  const eliminoValor = carritoCompras.reduce((acc, entrada) => acc + entrada.precio,0);
+
+  console.log(eliminoValor);
+
+  totalCompra.innerText = eliminoValor;
+  numeroDeEntradas.innerText = carritoCompras.length;
+
+
+  //*Elimino producto al storage
+  addLocalStorage()
+}; */
+
+
+
+//*Funciones JSON y localStorage
+
+function addLocalStorage(){
+    localStorage.setItem("carritoCompras", JSON.stringify(carritoCompras))
+    
+}
+
+
+/* function mostrarCompraStorage () {
+
+  if(localStorage.getItem("carritoCompras")){
+      let entradaStorage = JSON.parse(localStorage.getItem("carritoCompras"));
+      carritoCompras = entradaStorage
+  
+      let resultado = entradaStorage.reduce((acc, entrada) => acc + entrada.precio,0);
+  
+      numeroDeEntradas.innerText = entradaStorage.length
+      totalCompra.innerText = resultado
+      
+  }
+
+} */
+
+
+
+const eliminarProductoModal = (id) =>{
+  
+  const boleta = carritoCompras.find((entrada) => entrada.id === id);
+  console.log(boleta);
+  carritoCompras.splice(carritoCompras.indexOf(boleta), 1);
+  console.log(carritoCompras);
+
+  console.log("Hiciste click");
+
+  agregarCompraModal()
+
+
+ }
+
+           
+
+
+    
+
