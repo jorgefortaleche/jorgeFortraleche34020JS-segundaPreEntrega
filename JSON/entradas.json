@@ -1,7 +1,9 @@
 [
     {"cantidad":1,  "nombre": "Cirque Du Soleil", "zona": "general", "precio":12000, "imagen": "./img/cirque.jpg", "id": 1},
     {"cantidad":1,  "nombre": "David Guetta", "zona": "general", "precio":15500, "imagen": "./img/guetta.jpg", "id": 2},
-    {"cantidad":1,  "nombre": "Marco Carolla", "zona": "general", "precio":10500, "imagen": "./img/marco.webp", "id": 3}
-
+    {"cantidad":1,  "nombre": "Marco Carolla", "zona": "general", "precio":10500, "imagen": "./img/marco.webp", "id": 3},
+    {"cantidad":1,  "nombre": "Jbalvin", "zona": "general", "precio":13500, "imagen": "./img/jBalvin.jpg", "id": 4},
+    {"cantidad":1,  "nombre": "Soda stereo", "zona": "general", "precio":8500, "imagen": "./img/soda.jpg", "id": 5},
+    {"cantidad":1,  "nombre": "Boca VS River", "zona": "general", "precio":25000, "imagen": "./img/riverVsBoca.webp", "id": 6}
 
 ]
